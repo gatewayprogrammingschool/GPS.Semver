@@ -3,7 +3,6 @@ import * as br from 'bump-regex';
 export class GpsSemver {
     public bumper(text: string, level: string) {
         return new Promise<string>((resolve, reject) => {
-            var bumped = "";
             try {
                 this.GetVersion(text)
                     .then((res) => {

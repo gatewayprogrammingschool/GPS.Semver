@@ -20,13 +20,14 @@ export function activate(context: vscode.ExtensionContext) {
         // The code you place here will be executed every time your command is executed
 
         // Display a message box to the user
-        vscode.window.showInformationMessage("Started semver update.");
-
-        vscode.window.showInputBox({
-            prompt: "Select level:"
-            , placeHolder: "Major | Minor | Patch | Prerelease"
-        }).then(
-            (type) => {
+        vscode.window.showQuickPick(["major","minor","patch","pre"], {
+            placeHolder: "Pick version level"
+        }).then(            
+            (type: any) => {
+                if("majorminorpatchpre".indexOf(type) < 0) {
+                    vscode.window.showErrorMessage("Must enter one of the following: 'major' 'minor' 'patch' 'pre'");
+                    return;
+                }
                 var bumper = new bv.GpsSemver();
 
                 var editor = vscode.window.activeTextEditor;
@@ -44,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
 
                                 const fullRange = new vscode.Range(
                                     document.positionAt(0),
-                                    document.positionAt(original.length - 1)
+                                    document.positionAt(original.length)
                                 );
                                 var tedit = new vscode.TextEdit(fullRange, updated);
                                 var wsEdit = new vscode.WorkspaceEdit();
